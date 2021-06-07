@@ -1,23 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+<van-nav-bar title="标题" left-text="返回" left-arrow>
+  <template #right>
+    <van-icon name="search" size="18" />
+  </template>
+</van-nav-bar>
   </div>
 </template>
 
 <script>
+import { NavBar } from 'vant';
 export default {
-  name: 'App'
+  components:{
+    NavBar
+  }
+  
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
