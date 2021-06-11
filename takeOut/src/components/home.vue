@@ -62,7 +62,7 @@ export default {
         });
     
     })
-w},
+},
 beforeRouteUpdata(to,from,next){
     var app=this
       this.$request.post("/biz/queryBigCategory").then(function(res){

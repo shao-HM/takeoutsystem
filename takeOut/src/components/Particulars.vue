@@ -26,15 +26,8 @@
 </div>
 <van-tabs v-model="activeName">
   <van-tab title="点餐" name="a">  
-<van-sidebar v-model="activeKey">
-  <van-sidebar-item title="折扣" />
-  <van-sidebar-item title="进店必买" />
-  <van-sidebar-item title="新品" />
-   <van-sidebar-item title="福利优惠" />
-  <van-sidebar-item title="精品菜品" />
-  <van-sidebar-item title="人气套餐" />
-    <van-sidebar-item title="招牌菜区" />
-  <van-sidebar-item title="爆款疯抢" />
+<van-sidebar v-model="activeKey" class="add">
+  <van-sidebar-item :title="item.name"  v-for="item in classified" :key="item.id"  @click="onclass(item.id)"/>
 </van-sidebar>
 
   </van-tab>
@@ -50,7 +43,15 @@
   </van-tab>
   <van-tab title="商家" name="c">内容 3</van-tab>
 </van-tabs>
-
+<div  v-for="item in commodity" :key="item.id">
+   <van-card class="you"
+  num="2"
+  price="2.00"
+  :desc="item.info"
+  :title="item.name"
+  :thumb="'http://47.95.13.193:80/takeOutSystem-1.0-SNAPSHOT/'+item.photo"
+/> 
+</div>
     </div>
 </template>
 <script>
@@ -63,6 +64,8 @@ data(){
         activeName:'a',
         activeKey:'0',
         value:'',
+        classified:"",//分类
+        commodity:""//分类商品信息
     }
 },
 created(){
@@ -78,6 +81,37 @@ created(){
        app.coupons=res.data
    }) 
 },
+//分类信息
+beforeRouteEnter(to,from,next){
+   next(function(vm){
+       vm.$request.get("/biz/queryFoodCategory?id="+vm.id).then(function(res){
+           console.log(res.data)
+            vm.classified=res.data;
+           vm.$request.get("biz/queryFoodinfoByShopIdAndFoodCategoryId?shopId="+vm.id+"&foodcategoryId="+vm.classified[0].id).then(function(res){
+            console.log(res.data)
+            vm.commodity=res.data
+           })
+       })
+   })
+},
+beforeRouteUpdata(to,from,next){
+    var app=this;
+    this.$request.get("/biz/queryFoodCategory?id="+this.id).then(function(res){
+        console.log(res.data)
+    })
+
+},
+methods:{
+     onclass(index){
+         var app=this
+       this.$request.get("biz/queryFoodinfoByShopIdAndFoodCategoryId?shopId="+this.id+"&foodcategoryId="+index).then(function(res){
+           console.log(res.data)
+           app.commodity=res.data
+       }) 
+     }
+}
+
+
 }
 </script>
 <style>
@@ -97,7 +131,14 @@ created(){
     text-align: center;
 
 }
+.add{
+    float: left;
+}
 .right{
     width: 200px;
+}
+.you{
+
+    position: static;
 }
 </style>
