@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from "./store/index"
-import vant from "vant"
+import Vant from "vant"
 import "vant/lib/index.css"
-Vue.use(vant)
+import request from "./store/ajax"
+Vue.use(Vant)
 Vue.config.productionTip = false
+Vue.prototype.$request=request;
 
 /* eslint-disable no-new */
 new Vue({
